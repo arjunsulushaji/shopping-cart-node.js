@@ -1,3 +1,4 @@
+const { response } = require('express');
 var express = require('express');
 var router = express.Router();
 
@@ -5,9 +6,9 @@ var productHelper = require('../helpers/product-helpers')
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
-  productHelper.getAllProducts().then((products)=>{
+  productHelper.getAllProducts().then((products) => {
     // console.log(products);
-    res.render('admin/view-products', {products, admin: true })
+    res.render('admin/view-products', { products, admin: true })
   })
 });
 
@@ -25,6 +26,14 @@ router.post('/add-products', (req, res) => {
         console.log(err);
       }
     })
+  })
+})
+
+router.get('/delete-product/', (req, res) => {
+  let proId = req.query.id
+  // console.log(proId);
+  productHelper.deleteProduct(proId).then((response) => {
+    res.redirect('/admin')
   })
 })
 

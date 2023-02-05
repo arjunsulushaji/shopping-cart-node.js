@@ -3,46 +3,66 @@ var router = express.Router();
 var productHelper = require('../helpers/product-helpers')
 var userHelper = require('../helpers/user-helpers')
 
+const verifyLogin = (req, res,next) => {
+  if (req.session.loggedIn) {
+    next()
+  } else {
+    res.redirect('/login')
+  }
+}
+
 /* GET home page. */
-router.get('/', function (req, res, next) {
+router.get('/', function (req, res) {
 
   let user = req.session.user //checking user loggned or not 
   // console.log(user);
   productHelper.getAllProducts().then((products) => {
     // console.log(products);
-    res.render('user/view-products', {user, products, admin: false })
+    res.render('user/view-products', { user, products, admin: false })
   })
 });
 
-router.get('/login',(req,res)=>{
-  res.render('user/login')
+router.get('/login', (req, res) => {
+  if (req.session.loggedIn === true) {
+    res.redirect('/')
+  } else {
+    res.render('user/login', { "loginErr": req.session.logginErr })
+    req.session.logginErr = false
+  }
 })
 
-router.get('/signup',(req,res)=>{
+router.get('/signup', (req, res) => {
   res.render('user/signup')
 })
 
-router.post('/signup',(req,res)=>{
-  userHelper.doSignup(req.body).then((response)=>{
+router.post('/signup', (req, res) => {
+  userHelper.doSignup(req.body).then((response) => {
     console.log(response);
   })
 })
 
-router.post('/login',(req,res)=>{
-  userHelper.doLogin(req.body).then((response)=>{
-    if(response.status){
+router.post('/login', (req, res) => {
+  userHelper.doLogin(req.body).then((response) => {
+    if (response.status) {
       req.session.loggedIn = true
       req.session.user = response.user
       res.redirect('/')
     } else {
+      req.session.logginErr = "Invalid user name or password"
       res.redirect('/login')
     }
   })
 })
 
-router.get('/logout',(req,res)=>{
-  req.session.destroy()
+router.get('/logout', (req, res) => {
+  req.session.destroy();
   res.redirect('/')
 })
+
+router.get('/cart',verifyLogin, (req, res) => {
+  res.render('user/cart')
+})
+
+
 
 module.exports = router;
