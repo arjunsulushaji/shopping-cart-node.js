@@ -37,7 +37,10 @@ router.get('/signup', (req, res) => {
 
 router.post('/signup', (req, res) => {
   userHelper.doSignup(req.body).then((response) => {
-    console.log(response);
+    // console.log(response);
+    req.session.loggedIn = true
+    req.session.user = response.user
+    res.redirect('/')
   })
 })
 
@@ -59,8 +62,17 @@ router.get('/logout', (req, res) => {
   res.redirect('/')
 })
 
-router.get('/cart',verifyLogin, (req, res) => {
+router.get('/cart',verifyLogin, async(req, res) => {
+  let products =await  userHelper.getCartProducts(req.session.user._id)
+  console.log(products);
   res.render('user/cart')
+})
+
+router.get('/add-to-cart',verifyLogin,(req,res)=>{
+  let id = req.query.id
+  userHelper.addToCart(id,req.session.user._id).then(()=>{
+    res.redirect('/')
+  })
 })
 
 
