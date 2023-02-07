@@ -17,10 +17,13 @@
                     <th scope="row"><img style="width:50px; height:50px;"
                             src="/product-images/{{this.products._id}}.jpg" alt=""></th>
                     <td>{{this.products.productName}}</td>
-                    <td><button class="btn button mr-3"
+                    <td>
+                        <button class="btn button mr-3"
                             onclick="changeQuantity('{{this._id}}','{{this.products._id}}',-1)">-</button>
-                        {{this.quantity}} <button class="btn button ml-3"
-                            onclick="changeQuantity('{{this._id}}','{{this.products._id}}',1)">+</button></td>
+                        <span id="{{this.products._id}}">{{this.quantity}}</span>
+                        <button class="btn button ml-3"
+                            onclick="changeQuantity('{{this._id}}','{{this.products._id}}',1)">+</button>
+                    </td>
                     <td><a href="" class="btn btn-danger"
                             onclick="return confirm('Are you sure you want to remove {{this.productName}} from cart ? ')">Remove</a>
                     </td>
@@ -40,17 +43,26 @@
 </style>
 
 <script>
-    changeQuantity = (cartId,proId,count)=>{
+    changeQuantity = (cartId, proId, count) => {
+        let quantity = parseInt(document.getElementById(proId).innerHTML)
+        count = parseInt(count)
         $.ajax({
-            url:'/change-product-quantity',
-            data:{
-                cart:cartId,
-                product:proId,
-                count:count
+            url: '/change-product-quantity',
+            type: 'POST',
+            data: {
+                cart: cartId,
+                product: proId,
+                count: count,
+                quantity:quantity
             },
-            type:'POST',
-            success:(response)=>{
-                alert(response)
+            success: (response) => {
+                console.log(response)
+                if(response.removeProduct){
+                    alert('product removed from cart')
+                    location.reload()
+                } else {
+                    document.getElementById(proId).innerHTML=quantity+count
+                }
             }
         })
     }
