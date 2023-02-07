@@ -14,12 +14,16 @@
             <tbody>
                 {{#each products}}
                 <tr>
-                    {{#each this.products}}
-                    <th scope="row"><img style="width:50px; height:50px;" src="/product-images/{{this._id}}.jpg" alt=""></th>
-                    <td>{{this.productName}}</td>
-                    {{/each}}
-                    <td><button class="btn button mr-3">+</button> {{this.quantity}} <button class="btn button ml-3">-</button></td>
-                    <td><a href="" class="btn btn-danger" onclick="return confirm('Are you sure you want to remove {{this.productName}} from cart ? ')">Remove</a></td>
+                    <th scope="row"><img style="width:50px; height:50px;"
+                            src="/product-images/{{this.products._id}}.jpg" alt=""></th>
+                    <td>{{this.products.productName}}</td>
+                    <td><button class="btn button mr-3"
+                            onclick="changeQuantity('{{this._id}}','{{this.products._id}}',-1)">-</button>
+                        {{this.quantity}} <button class="btn button ml-3"
+                            onclick="changeQuantity('{{this._id}}','{{this.products._id}}',1)">+</button></td>
+                    <td><a href="" class="btn btn-danger"
+                            onclick="return confirm('Are you sure you want to remove {{this.productName}} from cart ? ')">Remove</a>
+                    </td>
                 </tr>
                 {{/each}}
             </tbody>
@@ -28,9 +32,26 @@
 </section>
 
 <style>
-    .button{
+    .button {
         width: 2.5rem;
         height: 2.5rem;
         font-weight: bolder;
     }
 </style>
+
+<script>
+    changeQuantity = (cartId,proId,count)=>{
+        $.ajax({
+            url:'/change-product-quantity',
+            data:{
+                cart:cartId,
+                product:proId,
+                count:count
+            },
+            type:'POST',
+            success:(response)=>{
+                alert(response)
+            }
+        })
+    }
+</script>
