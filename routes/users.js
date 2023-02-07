@@ -72,10 +72,11 @@ router.get('/cart', verifyLogin, async (req, res) => {
   res.render('user/cart', { products, user: req.session.user })
 })
 
-router.get('/add-to-cart', verifyLogin, (req, res) => {
-  let id = req.query.id
+router.get('/add-to-cart/:id', (req, res) => {
+  // console.log('api call.....');
+  let id = req.params.id
   userHelper.addToCart(id, req.session.user._id).then(() => {
-    res.redirect('/')
+    res.json({status:true})
   })
 })
 

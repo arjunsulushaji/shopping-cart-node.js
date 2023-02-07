@@ -12,8 +12,9 @@
                         <h5 class="card-title">{{this.productName}}</h5>
                         <h6 class="card-title">Rs : {{this.productAmount}}</h6>
                         <p class="card-text">{{this.productDescription}}</p>
-                        <a href="/add-to-cart?id={{this._id}}"  class="btn btn-primary">Add to Cart</a>
-                    </div>
+                        {{!-- <a href="/add-to-cart?id={{this._id}}"  class="btn btn-primary">Add to Cart</a> --}}
+                        <button class="btn btn-primary" onclick="addToCart('{{this._id}}')">Add to Cart</button>
+                    </div> 
                 </div>
             </div>
 
