@@ -1,3 +1,4 @@
+const { response } = require('express');
 var express = require('express');
 var router = express.Router();
 var productHelper = require('../helpers/product-helpers')
@@ -81,8 +82,15 @@ router.get('/add-to-cart/:id', (req, res) => {
 })
 
 router.post('/change-product-quantity',(req,res)=>{
-  console.log(req.body);
+  // console.log(req.body);
   userHelper.changeProductQuantity(req.body).then((response)=>{
+    res.json(response)
+  })
+})
+
+router.post('/remove-cart-item',(req,res)=>{
+  console.log(req.body)
+  userHelper.removeCartItem(req.body).then((response)=>{
     res.json(response)
   })
 })

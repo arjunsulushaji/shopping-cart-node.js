@@ -24,8 +24,8 @@
                         <button class="btn button ml-3"
                             onclick="changeQuantity('{{this._id}}','{{this.products._id}}',1)">+</button>
                     </td>
-                    <td><a href="" class="btn btn-danger"
-                            onclick="return confirm('Are you sure you want to remove {{this.productName}} from cart ? ')">Remove</a>
+                    <td><button class="btn btn-danger"
+                            onclick="removeCartItem('{{this.products._id}}','{{this._id}}')">Remove</button>
                     </td>
                 </tr>
                 {{/each}}
@@ -63,6 +63,21 @@
                 } else {
                     document.getElementById(proId).innerHTML=quantity+count
                 }
+            }
+        })
+    }
+
+    removeCartItem = (proId,cartId)=>{
+        $.ajax({
+            url:'/remove-cart-item',
+            type:'POST',
+            data:{
+                cartId : cartId,
+                proId : proId
+            },
+            success:(response)=>{
+                alert('Item removed from cart')
+                location.reload()
             }
         })
     }
