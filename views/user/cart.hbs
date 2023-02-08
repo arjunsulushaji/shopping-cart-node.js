@@ -21,10 +21,10 @@
                     <td>{{this.products.productAmount}}</td>
                     <td>
                         <button class="btn button mr-3"
-                            onclick="changeQuantity('{{this._id}}','{{this.products._id}}',-1)">-</button>
+                            onclick="changeQuantity('{{this._id}}','{{this.products._id}}','{{../user._id}}',-1)">-</button>
                         <span id="{{this.products._id}}">{{this.quantity}}</span>
                         <button class="btn button ml-3"
-                            onclick="changeQuantity('{{this._id}}','{{this.products._id}}',1)">+</button>
+                            onclick="changeQuantity('{{this._id}}','{{this.products._id}}','{{../user._id}}',1)">+</button>
                     </td>
                     <td><button class="btn btn-danger"
                             onclick="removeCartItem('{{this.products._id}}','{{this._id}}')">Remove</button>
@@ -33,7 +33,7 @@
                 {{/each}}
             </tbody>
         </table><hr>
-        <h3 class="text-right pr-5 pt-2">Total Rs : {{total}}</h3>
+        <h3 class="text-right pr-5 pt-2">Total Rs : <span id="total">{{total}}</span></h3>
         <a href="/place-order" class="btn btn-success float-right mr-5 mt-3 order-button">Place Order</a>
     </div>
 </section>
@@ -50,25 +50,26 @@
 </style>
 
 <script>
-    changeQuantity = (cartId, proId, count) => {
+    changeQuantity = (cartId, proId,userId, count) => {
         let quantity = parseInt(document.getElementById(proId).innerHTML)
         count = parseInt(count)
         $.ajax({
             url: '/change-product-quantity',
             type: 'POST',
             data: {
+                user:userId,
                 cart: cartId,
                 product: proId,
                 count: count,
                 quantity:quantity
             },
             success: (response) => {
-                console.log(response)
                 if(response.removeProduct){
                     alert('product removed from cart')
                     location.reload()
                 } else {
                     document.getElementById(proId).innerHTML=quantity+count
+                    document.getElementById('total').innerHTML=response.total
                 }
             }
         })

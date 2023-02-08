@@ -147,8 +147,8 @@ module.exports = {
     changeProductQuantity: (details) => {
         count = parseInt(details.count)
         quantity = parseInt(details.quantity)
-        console.log(count);
-        console.log(quantity);
+        // console.log(count);
+        // console.log(quantity);
         return new Promise((resolve, reject) => {
             if (count == -1 && quantity == 1) {
                 db.get().collection(collection.CART_COLLECTION).updateOne({ _id: ObjectId(details.cart) }, {
@@ -161,7 +161,7 @@ module.exports = {
                     $inc: { 'products.$.quantity': count }
                 }).then((response) => {
                     // console.log(response);
-                    resolve(true)
+                    resolve({status:true})
                 })
             }
         })
