@@ -135,7 +135,7 @@ module.exports = {
 
     getCartCount: (userId) => {
         return new Promise(async (resolve, reject) => {
-            // let count = 0
+            let count = 0
             let cart = await db.get().collection(collection.CART_COLLECTION).findOne({ user: ObjectId(userId) })
             if (cart) {
                 count = cart.products.length
@@ -168,12 +168,51 @@ module.exports = {
     },
 
     removeCartItem: (details) => {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             await db.get().collection(collection.CART_COLLECTION).updateOne({ _id: ObjectId(details.cartId) }, {
                 $pull: { products: { items: ObjectId(details.proId) } }
             }).then((response) => {
                 resolve(true)
             })
+        })
+    },
+
+    getTotalAmount: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            let total = await db.get().collection(collection.CART_COLLECTION).aggregate([
+                {
+                    $match: { user: ObjectId(userId) }
+                },
+                {
+                    $unwind: '$products'
+                }, {
+                    $project: {
+                        items: '$products.items',
+                        quantity: '$products.quantity'
+                    }
+                }, {
+                    $lookup: {
+                        from: collection.PRODUCT_COLLECTION,
+                        localField: 'items',
+                        foreignField: '_id',
+                        as: 'products'
+                    }
+                }, {
+                    $project: {
+                        items: 1,
+                        quantity: 1,
+                        products: { $arrayElemAt: ['$products', 0] }
+
+                    }
+                },{
+                    $group:{
+                        _id:null,
+                        total : {$sum:{$multiply:['$quantity','$products.productAmount']}}
+                    }
+                }
+            ]).toArray()
+            // console.log(total);
+            resolve(total[0].total)
         })
     }
 }

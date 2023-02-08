@@ -8,6 +8,7 @@
                 <tr>
                     <th scope="col">Item</th>
                     <th scope="col">Name</th>
+                    <th scope="col">Price</th>
                     <th scope="col">Quantity</th>
                 </tr>
             </thead>
@@ -17,6 +18,7 @@
                     <th scope="row"><img style="width:50px; height:50px;"
                             src="/product-images/{{this.products._id}}.jpg" alt=""></th>
                     <td>{{this.products.productName}}</td>
+                    <td>{{this.products.productAmount}}</td>
                     <td>
                         <button class="btn button mr-3"
                             onclick="changeQuantity('{{this._id}}','{{this.products._id}}',-1)">-</button>
@@ -30,7 +32,9 @@
                 </tr>
                 {{/each}}
             </tbody>
-        </table>
+        </table><hr>
+        <h3 class="text-right pr-5 pt-2">Total Rs : {{total}}</h3>
+        <a href="/place-order" class="btn btn-success float-right mr-5 mt-3 order-button">Place Order</a>
     </div>
 </section>
 
@@ -39,6 +43,9 @@
         width: 2.5rem;
         height: 2.5rem;
         font-weight: bolder;
+    }
+    .order-button{
+        width: 11rem;
     }
 </style>
 
