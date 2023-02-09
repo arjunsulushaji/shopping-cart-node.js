@@ -19,7 +19,8 @@
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">Mobile no</label>
-                        <input type="hidden" class="form-control" id="" placeholder="Mobile number" value="{{user._id}}" name="userid" hidden="">
+                        <input type="hidden" class="form-control" id="" placeholder="Mobile number" value="{{user._id}}"
+                            name="userid" hidden="">
                     </div>
                 </div>
                 <div class="second ml-5">
@@ -47,16 +48,15 @@
 </section>
 
 <script>
-    $("#checkout-form").submit((e)=>{
+    $("#checkout-form").submit((e) => {
         e.preventDefault()
         $.ajax({
-            url:'/place-order',
-            type;'POST',
-            data:$('#checkout-form').serialize(),
-            success:(response)=>{
-                alert(response)
-                if(response.status){
-                    location.href=''
+            url: '/place-order',
+            type: 'POST',
+            data: $('#checkout-form').serialize(),
+            success: (response) => {
+                if (response.status) {
+                    location.href = 'order-success'
                 }
             }
         })

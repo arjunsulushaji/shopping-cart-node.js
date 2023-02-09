@@ -106,9 +106,20 @@ router.post('/place-order', async (req, res) => {
   // console.log(req.body);
   let products = await userHelper.getCartProdList(req.body.userid)
   let totalPrice = await userHelper.getTotalAmount(req.body.userid)
-  userHelper.placeOrder(req.body, products, totalPrice).then((response) => {
-    res.json({ status: true })
+  await userHelper.placeOrder(req.body, products, totalPrice).then((response) => {
+    // console.log(response);
+    res.json({status:true})
   })
+})
+
+router.get('/order-success',(req,res)=>{
+  res.render('user/order-success',{user:req.session.user})
+})
+
+router.get('/orders',async(req,res)=>{
+  let orders = await userHelper.getAllOrders(req.session.user._id)
+  console.log(orders);
+  res.render('user/orders',{orders})
 })
 
 

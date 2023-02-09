@@ -217,6 +217,7 @@ module.exports = {
     },
 
     placeOrder: (order, products, total) => {
+        const date = new Date()
         return new Promise((resolve, reject) => {
             let status = order.payment === 'cod' ? 'placed' : 'pending'
             let orderObj = {
@@ -228,13 +229,13 @@ module.exports = {
                 userId: ObjectId(order.userid),
                 paymentMethod: order.payment,
                 products: products,
-                totalAmount : total,
+                totalAmount: total,
                 status: status,
-                date : new Date()
+                date: date
             }
-            db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response)=>{
-                db.get().collection(collection.CART_COLLECTION).remove({user:ObjectId(order.userid)})
-                resolve()
+            db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
+                db.get().collection(collection.CART_COLLECTION).deleteOne({ user: ObjectId(order.userid) })
+                resolve(response)
             })
         })
     },
@@ -243,6 +244,14 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             let cart = await db.get().collection(collection.CART_COLLECTION).findOne({ user: ObjectId(userId) })
             resolve(cart.products)
+        })
+    },
+
+    getAllOrders: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            db.get().collection(collection.ORDER_COLLECTION).find({ userId: ObjectId(userId) }).then((response)=>{
+                resolve(response)
+            })
         })
     }
 }

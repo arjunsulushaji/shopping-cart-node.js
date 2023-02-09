@@ -1,0 +1,29 @@
+<section>
+    <div class="container pt-5">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Pincode</th>
+                    <th scope="col">Mobile No</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Payment</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">{{orders.date}}</th>
+                    <td>{{orders.deliveryDetails.address}}</td>
+                    <td>{{orders.deliveryDetails.pincode}}</td>
+                    <td>{{orders.deliveryDetails.mobile}}</td>
+                    <td>{{orders.totalAmount}}</td>
+                    <td>{{orders.paymentMethod}}</td>
+                    <td>{{orders.status}}</td>
+                    <td><a href="" class="btn btn-primary">view products</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
