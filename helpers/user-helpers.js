@@ -266,7 +266,7 @@ module.exports = {
             instance.orders.create({
                 amount: totalPrice,
                 currency: "INR",
-                receipt: ""+orderId,
+                receipt: "" + orderId,
                 notes: {
                     key1: "value3",
                     key2: "value2"
@@ -275,6 +275,25 @@ module.exports = {
                 console.log("new order", order);
                 resolve(order)
             })
+        })
+    },
+
+    verifyPayment: (details) => {
+        return new Promise(async(resolve, reject) => {
+            const {
+                createHmac,
+            } = await import('node:crypto');
+
+            let hmac = createHmac('sha256', 'Ucsj7vHYlOJUTXn0d779X2Yq');
+            
+
+            hmac.update(details['payment[razorpay_order_id]'] + '|' + details['payment[razorpay_payment_id]'])
+            hmac = hmac.digest('hex')
+            if (hmac == details['payment[razorpay_signature]']) {
+                resolve()
+            } else {
+                reject()
+            }
         })
     }
 }

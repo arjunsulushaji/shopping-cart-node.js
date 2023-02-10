@@ -130,6 +130,15 @@ router.get('/orders', async (req, res) => {
 
 router.post('/verify-payment',(req,res)=>{
   console.log(req.body);
+  // userHelper.verifyPayment(req.body).then(()=>{
+  //   userHelper.changePaymentStatus(req.body['receipt']).then(()=>{
+  //     console.log('payment successfull');
+  //     res.json({status:true})
+  //   })
+  // }).catch((err)=>{
+  //   console.log(err);
+  //   res.json({status:'payment failed'})
+  // })
 })
 
 
