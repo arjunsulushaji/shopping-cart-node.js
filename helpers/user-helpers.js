@@ -6,6 +6,7 @@ const { use } = require('../routes/users')
 const { response } = require('express')
 
 const Razorpay = require('razorpay');
+const { resolve } = require('node:path')
 var instance = new Razorpay({
     key_id: 'rzp_test_uT0wiliLFjy3w2',
     key_secret: 'Ucsj7vHYlOJUTXn0d779X2Yq',
@@ -264,7 +265,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
 
             instance.orders.create({
-                amount: totalPrice,
+                amount: totalPrice*100,
                 currency: "INR",
                 receipt: "" + orderId,
                 notes: {
@@ -294,6 +295,18 @@ module.exports = {
             } else {
                 reject()
             }
+        })
+    },
+
+    changePaymentStatus:(orderId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:ObjectId(orderId)},{
+                $set:{
+                    status:'placed'
+                }
+            }).then(()=>{
+                resolve()
+            })
         })
     }
 }
