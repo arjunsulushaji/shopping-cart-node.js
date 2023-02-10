@@ -13,16 +13,18 @@
                 </tr>
             </thead>
             <tbody>
+                {{#each orders}}
                 <tr>
-                    <th scope="row">{{orders.date}}</th>
-                    <td>{{orders.deliveryDetails.address}}</td>
-                    <td>{{orders.deliveryDetails.pincode}}</td>
-                    <td>{{orders.deliveryDetails.mobile}}</td>
-                    <td>{{orders.totalAmount}}</td>
-                    <td>{{orders.paymentMethod}}</td>
-                    <td>{{orders.status}}</td>
+                    <td scope="row">{{this.date}}</td>
+                    <td>{{this.deliveryDetails.address}}</td>
+                    <td>{{this.deliveryDetails.pincode}}</td>
+                    <td>{{this.deliveryDetails.mobile}}</td>
+                    <td>{{this.totalAmount}}</td>
+                    <td>{{this.paymentMethod}}</td>
+                    <td>{{this.status}}</td>
                     <td><a href="" class="btn btn-primary">view products</a></td>
                 </tr>
+                {{/each}}
             </tbody>
         </table>
     </div>

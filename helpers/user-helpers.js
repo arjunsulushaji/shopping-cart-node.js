@@ -249,9 +249,8 @@ module.exports = {
 
     getAllOrders: (userId) => {
         return new Promise(async (resolve, reject) => {
-            db.get().collection(collection.ORDER_COLLECTION).find({ userId: ObjectId(userId) }).then((response)=>{
-                resolve(response)
-            })
+            let orders = await db.get().collection(collection.ORDER_COLLECTION).find({ userId: ObjectId(userId) }).toArray()
+            resolve(orders)
         })
     }
 }

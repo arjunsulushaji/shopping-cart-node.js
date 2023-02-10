@@ -118,7 +118,7 @@ router.get('/order-success',(req,res)=>{
 
 router.get('/orders',async(req,res)=>{
   let orders = await userHelper.getAllOrders(req.session.user._id)
-  console.log(orders);
+  // console.log(orders);
   res.render('user/orders',{orders})
 })
 
