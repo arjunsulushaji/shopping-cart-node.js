@@ -3,7 +3,7 @@
         <div class="row p-3 float-right">
             <a href="/admin/add-products/" class="btn btn-primary">Add Products</a>
         </div>
-        <table class="table">
+        <table class="table" id="tablelist">
             <thead>
                 <tr>
                     <th scope="col">No</th>
@@ -33,3 +33,9 @@
         </table>
     </div>
 </section>
+
+<script>
+    $(document).ready( function () {
+    $('#tablelist').DataTable();
+} );
+</script>
