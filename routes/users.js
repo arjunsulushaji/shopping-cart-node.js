@@ -69,9 +69,15 @@ router.get('/logout', (req, res) => {
 
 router.get('/cart', verifyLogin, async (req, res) => {
   let products = await userHelper.getCartProducts(req.session.user._id)
-  let total = await userHelper.getTotalAmount(req.session.user._id)
+  let total = 0
+  if (products.length > 0) {
+    total = await userHelper.getTotalAmount(req.session.user._id)
+    res.render('user/cart', { products, 'user': req.session.user, total })
+  } else {
+    res.redirect('/')
+  }
   // console.log(products);
-  res.render('user/cart', { products, 'user': req.session.user, total })
+
 })
 
 router.get('/add-to-cart/:id', (req, res) => {
@@ -107,7 +113,9 @@ router.post('/place-order', async (req, res) => {
   let products = await userHelper.getCartProdList(req.body.userid)
   let totalPrice = await userHelper.getTotalAmount(req.body.userid)
   await userHelper.placeOrder(req.body, products, totalPrice).then((orderId) => {
+    // console.log(orderId);
     // console.log(response);
+    // console.log(totalPrice);
     if (req.body['payment'] === 'cod') {
       res.json({ codsuccess: true })
     } else {

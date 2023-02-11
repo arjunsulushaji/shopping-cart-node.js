@@ -55,4 +55,17 @@ router.post('/edit-products', async (req, res) => {
   })
 })
 
+router.get('/view-orders',async(req,res)=>{
+  let allOrders = await productHelper.getAllOrders('placed')
+  // console.log(allOrders);
+  res.render('admin/view-orders',{allOrders})
+})
+
+router.get('/ship-order',(req,res)=>{
+  // console.log(req.query.id);
+  productHelper.changeOrderStatus(req.query.id).then((response)=>{
+    res.redirect('/admin/view-orders')
+  })
+})
+
 module.exports = router;

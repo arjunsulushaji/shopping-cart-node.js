@@ -262,16 +262,13 @@ module.exports = {
     },
 
     generateRazorpay: (orderId, totalPrice) => {
+        // console.log(orderId,totalPrice);
         return new Promise((resolve, reject) => {
 
             instance.orders.create({
-                amount: totalPrice*100,
+                amount: totalPrice * 100,
                 currency: "INR",
-                receipt: "" + orderId,
-                notes: {
-                    key1: "value3",
-                    key2: "value2"
-                }
+                receipt: "" + ObjectId(orderId),
             }, (err, order) => {
                 console.log("new order", order);
                 resolve(order)
@@ -280,13 +277,13 @@ module.exports = {
     },
 
     verifyPayment: (details) => {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             const {
                 createHmac,
             } = await import('node:crypto');
 
             let hmac = createHmac('sha256', 'Ucsj7vHYlOJUTXn0d779X2Yq');
-            
+
 
             hmac.update(details['payment[razorpay_order_id]'] + '|' + details['payment[razorpay_payment_id]'])
             hmac = hmac.digest('hex')
@@ -298,13 +295,13 @@ module.exports = {
         })
     },
 
-    changePaymentStatus:(orderId)=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:ObjectId(orderId)},{
-                $set:{
-                    status:'placed'
+    changePaymentStatus: (orderId) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: ObjectId(orderId) }, {
+                $set: {
+                    status: 'placed'
                 }
-            }).then(()=>{
+            }).then(() => {
                 resolve()
             })
         })

@@ -1,0 +1,27 @@
+<section>
+    <div class="container pt-5">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Payment</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each allOrders}}
+                <tr>
+                    {{#each products}}
+                    <th scope="row"><img style="width: 60px; height:60px;" src="/product-images/{{items}}.jpg"></th>
+                    {{/each}}
+                    <td>{{this.deliveryDetails.address}}</td>
+                    <td>{{this.paymentMethod}}</td>
+                    <td>{{this.status}}</td>
+                    <td><a href="/admin/ship-order?id={{this._id}}" class="btn btn-primary">Shipped</a></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</section>

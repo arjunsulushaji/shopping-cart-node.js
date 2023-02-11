@@ -51,5 +51,25 @@ module.exports = {
                 resolve(response)
             })
         })
+    },
+
+    getAllOrders: (status) => {
+        // console.log(status);
+        return new Promise(async (resolve, reject) => {
+            let allOrders = await db.get().collection(collection.ORDER_COLLECTION).find({ status: 'placed' }).toArray()
+            resolve(allOrders)
+        })
+    },
+
+    changeOrderStatus: (orderId) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: ObjectId(orderId) }, {
+                $set: {
+                    status: 'shipped'
+                }
+            }).then(() => {
+                resolve(response)
+            })
+        })
     }
 }
